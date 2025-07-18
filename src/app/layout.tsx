@@ -1,3 +1,4 @@
+import vazirFont from "@/constants/localFonts";
 import "./styles/globals.css";
 import type { Metadata } from "next";
 
@@ -13,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fa" dir="rtl">
-      <body className="">{children}</body>
+      <body className={`${vazirFont.variable} font-sans`}>{children}</body>
     </html>
   );
 }
