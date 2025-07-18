@@ -1,4 +1,4 @@
-import "./globals.css";
+import "./styles/globals.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,7 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fa" dir="rtl">
-      <body className="bg-amber-100">{children}</body>
+      <body className="">{children}</body>
     </html>
   );
 }

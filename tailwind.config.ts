@@ -1,4 +1,7 @@
-import type { Config } from "tailwindcss";
+/** @type {import('tailwindcss').Config} */
+
+import { fontFamily } from "tailwindcss/defaultTheme";
+import tailwindFormPlugin from "@tailwindcss/forms";
 
 function withOpacity(variableName: string) {
   return ({ opacityValue }: { opacityValue?: string }) => {
@@ -9,8 +12,8 @@ function withOpacity(variableName: string) {
   };
 }
 
-const config: Config = {
-  content: ["./app/**/*.{js,ts,jsx,tsx}", "./src/**/*.{js,ts,jsx,tsx}"],
+export default {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   darkMode: ["class", '[class="dark-mode"]'],
   theme: {
     extend: {
@@ -48,11 +51,14 @@ const config: Config = {
         padding: "1rem",
       },
       fontFamily: {
-        sans: ["var(--font-vazir)"],
+        sans: ["var(--font-vazir)", ...fontFamily.sans],
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require("@tailwindcss/aspect-ratio"),
+    tailwindFormPlugin({
+      strategy: "class",
+    }),
+  ],
 };
-
-export default config;

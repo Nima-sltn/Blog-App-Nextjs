@@ -1,3 +1,3 @@
 export default function Home() {
-  return <h1 className="">Blog App</h1>;
+  return <button className="btn btn--primary">Blog App</button>;
 }
