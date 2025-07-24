@@ -1,0 +1,36 @@
+name: Auto PR and Merge
+
+on:
+  push:
+    branches:
+      - "feature/**"
+
+jobs:
+  create-and-merge-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "Auto PR from ${{ github.ref_name }}"
+          branch: ${{ github.ref_name }}
+          base: main
+          body: |
+            This pull request was automatically created from branch `${{ github.ref_name }}`
+            and will be merged after successful checks.
+          labels: auto-pr
+
+      - name: Wait for PR to be created
+        run: sleep 10
+
+      - name: Auto-merge the pull request
+        uses: pascalgn/automerge-action@v0.16.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGE_LABELS: auto-pr
+          MERGE_METHOD: squash
+          MERGE_COMMIT_MESSAGE: pull-request-title
