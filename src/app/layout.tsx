@@ -1,5 +1,7 @@
+import vazirFont from "@/constants/localFonts";
 import "./styles/globals.css";
 import type { Metadata } from "next";
+import Header from "@/components/Header/Header";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,7 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fa" dir="rtl">
-      <body className="">{children}</body>
+      <body className={`${vazirFont.variable} min-h-screen font-sans`}>
+        <Header />
+        <div className="container xl:max-w-screen-xl"> {children}</div>
+      </body>
     </html>
   );
 }
