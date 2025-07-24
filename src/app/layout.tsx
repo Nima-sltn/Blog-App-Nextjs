@@ -1,5 +1,5 @@
 import vazirFont from "@/constants/localFonts";
-import "./styles/globals.css";
+import "../styles/globals.css";
 import type { Metadata } from "next";
 import Header from "@/components/Header/Header";
 
