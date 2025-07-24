@@ -1,3 +1,9 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "بلاگ ها",
+};
+
 const layout = ({
   children,
 }: Readonly<{
