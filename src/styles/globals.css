@@ -74,16 +74,16 @@
 
 @layer components {
   .form {
-    @apply flex flex-col gap-y-8 bg-secondary-0 p-4 rounded-xl w-full max-w-lg;
+    @apply flex w-full max-w-lg flex-col gap-y-8 rounded-xl bg-secondary-0 p-4;
   }
   .textField__input {
-    @apply w-full py-3 px-4 rounded-xl text-secondary-900 border border-secondary-100 bg-secondary-100 hover:border-primary-500 focus:border-primary-500 focus:bg-secondary-0 transition-all duration-300 ease-out focus:shadow-lg focus:shadow-primary-200 dark:focus:shadow-secondary-200;
+    @apply w-full rounded-xl border border-secondary-100 bg-secondary-100 px-4 py-3 text-secondary-900 transition-all duration-300 ease-out hover:border-primary-500 focus:border-primary-500 focus:bg-secondary-0 focus:shadow-lg focus:shadow-primary-200 dark:focus:shadow-secondary-200;
   }
   .btn {
-    @apply px-3 py-3 rounded-xl transition-all duration-300;
+    @apply rounded-xl px-3 py-3 transition-all duration-300;
   }
   .btn--primary {
-    @apply bg-primary-900 hover:bg-primary-700 text-primary-100;
+    @apply bg-primary-900 text-primary-100 hover:bg-primary-700;
   }
   .btn--secondary {
     @apply bg-secondary-600 text-secondary-100;

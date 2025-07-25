@@ -1,5 +1,6 @@
-import React from "react";
+import React, { Suspense } from "react";
 import PostList from "./_components/PostList";
+import Spinner from "@/ui/Spinner/Spinner";
 
 const BlogPage = async () => {
   return (
@@ -16,7 +17,9 @@ const BlogPage = async () => {
         رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات
         پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
       </p>
-      <PostList />
+      <Suspense fallback={<Spinner />}>
+        <PostList />
+      </Suspense>
     </>
   );
 };
