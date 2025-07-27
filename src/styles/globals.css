@@ -180,6 +180,22 @@ input[type="number"] {
   -moz-appearance: textfield; /* Firefox */
 }
 
+/*  Chrome, Safari, Edge */
+::-webkit-scrollbar {
+  width: 3px;
+  height: 4px;
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #4a6dff;
+  border-radius: 6px;
+}
+
 /* TABLE */
 
 table {

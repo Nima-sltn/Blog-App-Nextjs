@@ -10,7 +10,7 @@ interface CoverImageProps {
 const CoverImage: FC<CoverImageProps> = ({ coverImageUrl, title, slug }) => {
   return (
     <div className="aspect-video relative mb-6 overflow-hidden rounded-md">
-      <Link href={slug}>
+      <Link href={`/blogs/${slug}`}>
         <Image
           src={coverImageUrl}
           alt={title}
