@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import CategoryList from "./_components/CategoryList";
+import CategoryList from "../_components/CategoryList";
 import { Suspense } from "react";
 import Spinner from "@/ui/Spinner/Spinner";
 
