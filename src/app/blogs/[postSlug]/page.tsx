@@ -14,11 +14,7 @@ export const generateMetadata = async ({ params }: { params: Params }) => {
 };
 
 const singlePost = async ({ params }: { params: Params }) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/post/slug/${params.postSlug}`,
-  );
-  const { data } = await res.json();
-  const { post } = data || {};
+  const post = await getPostBySlug(params.postSlug);
 
   if (!post) notFound();
 
