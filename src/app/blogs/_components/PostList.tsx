@@ -1,9 +1,7 @@
-import Image from "next/image";
 import { Post } from "../type";
 import CoverImage from "./CoverImage";
 import Link from "next/link";
 import { ClockIcon } from "@heroicons/react/24/outline";
-import Avatar from "@/ui/Avatar/Avatar";
 import Author from "@/ui/Author/Author";
 import PostInteraction from "./PostInteraction";
 import { toPersianDigits } from "@/utils/numberFormatter";

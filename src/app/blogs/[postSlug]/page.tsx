@@ -2,18 +2,14 @@ import { getPostBySlug } from "@/services/postServices";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-type Params = {
-  postSlug: string;
-};
-
-export const generateMetadata = async ({ params }: { params: Params }) => {
+export const generateMetadata = async ({ params }: { params: any }) => {
   const post = await getPostBySlug(params.postSlug);
   return {
     title: `${post.title}`,
   };
 };
 
-const singlePost = async ({ params }: { params: Params }) => {
+const singlePost = async ({ params }: { params: any }) => {
   const post = await getPostBySlug(params.postSlug);
 
   if (!post) notFound();
