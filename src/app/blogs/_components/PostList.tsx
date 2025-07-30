@@ -5,17 +5,16 @@ import { ClockIcon } from "@heroicons/react/24/outline";
 import Author from "@/ui/Author/Author";
 import PostInteraction from "./PostInteraction";
 import { toPersianDigits } from "@/utils/numberFormatter";
+import { getPosts } from "@/services/postServices";
 
 const PostList = async () => {
   // await new Promise((res) => setTimeout(res, 3000));
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/post/list`);
-  const {
-    data: { posts },
-  }: { data: { posts: Post[] } } = await res.json();
+
+  const posts = await getPosts();
 
   return posts.length > 0 ? (
     <div className="grid grid-cols-12 gap-8">
-      {posts.map((post) => (
+      {posts.map((post: Post) => (
         <div
           className="col-span-12 rounded-lg border border-secondary-300 p-2 sm:col-span-6 lg:col-span-4"
           key={post._id}
