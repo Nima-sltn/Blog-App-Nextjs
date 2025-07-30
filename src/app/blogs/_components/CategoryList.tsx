@@ -18,7 +18,6 @@ const CategoryList = async () => {
   const {
     data: { categories },
   } = await res.json();
-  console.log(categories);
 
   return (
     <ul className="space-y-4">
