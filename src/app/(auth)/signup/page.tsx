@@ -1,8 +1,11 @@
 "use client";
+import { signupApi } from "@/services/authService";
 import Button from "@/ui/Button/Button";
 import RHFTextField from "@/ui/RHFTextField/RHFTextField";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import * as yup from "yup";
 
 const schema = yup.object({
@@ -12,7 +15,10 @@ const schema = yup.object({
     .max(30)
     .required("نام و نام خوانوادگی الزامی است"),
   email: yup.string().email("ایمیل نامعتبر است").required("ایمیل الزامی است"),
-  password: yup.string().required("رمز عبور الزامی است"),
+  password: yup
+    .string()
+    .min(8, "حداقل 8 کاراکتر نیاز است")
+    .required("رمز عبور الزامی است"),
 });
 
 const Signup = () => {
@@ -25,8 +31,15 @@ const Signup = () => {
     mode: "onSubmit",
   });
 
-  const onSubmit = (values: any) => {
-    console.log(values);
+  const onSubmit = async (values: any) => {
+    try {
+      const { user, message } = await signupApi(values);
+      console.log(user, message);
+      toast.success(message);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message);
+      console.log(error?.response?.data?.message);
+    }
   };
 
   return (
@@ -34,7 +47,7 @@ const Signup = () => {
       <h1 className="mb-6 text-center text-xl font-bold text-secondary-500">
         ثبت نام
       </h1>
-      <form className="space-y-8" onSubmit={handleSubmit(onSubmit)}>
+      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <RHFTextField
           label="نام و نام خانوادگی"
           name="name"
@@ -60,6 +73,12 @@ const Signup = () => {
           تایید
         </Button>
       </form>
+      <Link
+        href="/signin"
+        className="mt-4 text-center text-lg text-secondary-500"
+      >
+        ورود
+      </Link>
     </>
   );
 };
