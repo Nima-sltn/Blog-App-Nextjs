@@ -14,7 +14,9 @@ export interface Category {
 const CategoryList = async () => {
   // await new Promise((res) => setTimeout(res, 2000));
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/category/list`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/category/list`, {
+    cache: "force-cache",
+  });
   const {
     data: { categories },
   } = await res.json();
