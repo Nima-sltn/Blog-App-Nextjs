@@ -2,6 +2,7 @@ import vazirFont from "@/constants/localFonts";
 import "../styles/globals.css";
 import type { Metadata } from "next";
 import Header from "@/components/Header/Header";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: {
@@ -19,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl">
       <body className={`${vazirFont.variable} min-h-screen font-sans`}>
+        <Toaster />
         <Header />
         <div className="container xl:max-w-screen-xl"> {children}</div>
       </body>

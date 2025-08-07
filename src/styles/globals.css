@@ -79,6 +79,9 @@
   .textField__input {
     @apply w-full rounded-xl border border-secondary-100 bg-secondary-100 px-4 py-3 text-secondary-900 transition-all duration-300 ease-out hover:border-primary-500 focus:border-primary-500 focus:bg-secondary-0 focus:shadow-lg focus:shadow-primary-200 dark:focus:shadow-secondary-200;
   }
+  .textField--invalid {
+    @apply border-red-500;
+  }
   .btn {
     @apply rounded-xl px-3 py-3 transition-all duration-300;
   }
