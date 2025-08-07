@@ -18,9 +18,7 @@ const RHFTextField = <TFormValues extends Record<string, any>>({
   const hasError = !!(errors && errorMessages);
 
   return (
-    <div
-      className={`textField relative ${hasError ? "textField--invalid" : ""}`}
-    >
+    <div className="textField relative">
       <label htmlFor={name} className="mb-2 block text-secondary-700">
         {label}
       </label>
@@ -29,7 +27,7 @@ const RHFTextField = <TFormValues extends Record<string, any>>({
         type={type}
         id={name}
         dir={dir}
-        className={`textField__input ${dir === "ltr" ? "text-left" : "text-right"}`}
+        className={`textField__input ${dir === "ltr" ? "text-left" : "text-right"} ${hasError ? "textField--invalid" : ""}`}
         {...register(name, validationSchema)}
         {...rest}
       />
