@@ -83,7 +83,7 @@
     @apply border-red-500;
   }
   .btn {
-    @apply rounded-xl px-3 py-3 transition-all duration-300;
+    @apply h-12 rounded-xl px-3 transition-all duration-300;
   }
   .btn--primary {
     @apply bg-primary-900 text-primary-100 hover:bg-primary-700;
