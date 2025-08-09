@@ -1,4 +1,5 @@
 "use client";
+import { useAuth } from "@/context/AuthContext";
 import { signinApi } from "@/services/authService";
 import Button from "@/ui/Button/Button";
 import RHFTextField from "@/ui/RHFTextField/RHFTextField";
@@ -26,15 +27,10 @@ const Signin = () => {
     mode: "onSubmit",
   });
 
+  const { signin } = useAuth();
+
   const onSubmit = async (values: any) => {
-    try {
-      const { user, message } = await signinApi(values);
-      console.log(user, message);
-      toast.success(message);
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message);
-      console.log(error?.response?.data?.message);
-    }
+    await signin(values);
   };
 
   return (
