@@ -2,6 +2,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { signupApi } from "@/services/authService";
 import Button from "@/ui/Button/Button";
+import Loading from "@/ui/Loading/Loading";
 import RHFTextField from "@/ui/RHFTextField/RHFTextField";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
@@ -66,7 +67,7 @@ const Signup = () => {
           errors={errors}
         />
         <Button type="submit" variant="primary" className="w-full">
-          تایید
+          {isLoading ? <Loading /> : "تایید"}
         </Button>
       </form>
       <Link
