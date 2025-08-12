@@ -1,13 +1,11 @@
 "use client";
 import { useAuth } from "@/context/AuthContext";
-import { signupApi } from "@/services/authService";
 import Button from "@/ui/Button/Button";
 import Loading from "@/ui/Loading/Loading";
 import RHFTextField from "@/ui/RHFTextField/RHFTextField";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import * as yup from "yup";
 
 const schema = yup.object({
