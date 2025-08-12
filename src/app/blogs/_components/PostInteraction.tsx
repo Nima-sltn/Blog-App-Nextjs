@@ -7,9 +7,12 @@ import {
   ChatBubbleOvalLeftEllipsisIcon,
   HeartIcon,
 } from "@heroicons/react/24/outline";
-import { HeartIcon as SolidHeartIcon } from "@heroicons/react/24/solid";
+import {
+  HeartIcon as SolidHeartIcon,
+  BookmarkIcon as SolidBookmarkIcon,
+} from "@heroicons/react/24/solid";
 import { toPersianDigits } from "@/utils/numberFormatter";
-import { likePostApi } from "@/services/postServices";
+import { bookmarkPostApi, likePostApi } from "@/services/postServices";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
@@ -30,6 +33,16 @@ const PostInteraction: FC<PostInteractionProps> = ({ post }) => {
     }
   };
 
+  const bookmarkHandler = async (postId: any) => {
+    try {
+      const { message } = await bookmarkPostApi(postId);
+      toast.success(message);
+      router.refresh();
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
   return (
     <div className="flex items-center gap-4">
       <ButtonIcon variant="secondary">
@@ -39,8 +52,8 @@ const PostInteraction: FC<PostInteractionProps> = ({ post }) => {
       <ButtonIcon variant="red" onClick={() => likeHandler(post._id)}>
         {post.isLiked ? <SolidHeartIcon /> : <HeartIcon />}
       </ButtonIcon>
-      <ButtonIcon variant="primary">
-        <BookmarkIcon />
+      <ButtonIcon variant="primary" onClick={() => bookmarkHandler(post._id)}>
+        {post.isBookmarked ? <SolidBookmarkIcon /> : <BookmarkIcon />}
       </ButtonIcon>
     </div>
   );

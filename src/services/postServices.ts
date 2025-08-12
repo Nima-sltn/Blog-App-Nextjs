@@ -20,3 +20,7 @@ export const getPosts = async (options: RequestInit) => {
 export const likePostApi = async (postId: any) => {
   return http.post(`/post/like/${postId}`).then(({ data }) => data.data);
 };
+
+export const bookmarkPostApi = async (postId: any) => {
+  return http.post(`/post/bookmark/${postId}`).then(({ data }) => data.data);
+};
