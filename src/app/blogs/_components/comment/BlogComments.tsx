@@ -5,24 +5,56 @@ import Comment from "./Comment";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import { Post, PostComment, PostCommentAnswer } from "@/types/common";
+import Modal from "@/ui/Modal/Modal";
+import { useAuth } from "@/context/AuthContext";
+import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import CommentForm from "./CommentForm";
 
 interface BlogCommentsProps {
   post: Post;
 }
 
 function BlogComments({ post: { comments, _id: postId } }: BlogCommentsProps) {
+  const { user } = useAuth();
+  const [isOpen, setOpen] = useState(false);
+  const [parent, setParent] = useState<PostComment | null>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const addNewCommentHandler = (parent: PostComment | null) => {
+    if (!user) {
+      router.push(`/signin?redirect=${encodeURIComponent(pathname)}`);
+      return;
+    }
+    setParent(parent);
+    setOpen(true);
+  };
+
   return (
     <div className="mb-10">
       <div className="mb-8 flex flex-col items-center justify-between gap-y-3 lg:flex-row">
         <h2 className="text-2xl font-bold text-secondary-800">نظرات</h2>
         <Button
-          // onClick={() => addNewCommentHandler(null)}
+          onClick={() => addNewCommentHandler(null)}
           variant="outline"
           className="flex items-center py-2"
         >
           <QuestionMarkCircleIcon className="ml-2 w-4" />
           <span>ثبت نظر جدید</span>
-        </Button>
+        </Button>{" "}
+        <Modal
+          title={parent ? "پاسخ به نظر" : "نظر جدید"}
+          description={parent ? parent.user.name : "نظر خود را وارد کنید"}
+          open={isOpen}
+          onClose={() => setOpen(false)}
+        >
+          <CommentForm
+            postId={postId}
+            parentId={parent ? parent._id : null}
+            onClose={() => setOpen(false)}
+          />
+        </Modal>
       </div>
 
       <div className="post-comments space-y-8 rounded-xl bg-secondary-0 px-3 py-6 lg:px-6">
@@ -32,7 +64,7 @@ function BlogComments({ post: { comments, _id: postId } }: BlogCommentsProps) {
               <div className="mb-3 rounded-xl border border-secondary-200 p-2 sm:p-4">
                 <Comment
                   comment={comment}
-                  // onAddComment={() => addNewCommentHandler(comment)}
+                  onAddComment={() => addNewCommentHandler(comment)}
                 />
               </div>
 
