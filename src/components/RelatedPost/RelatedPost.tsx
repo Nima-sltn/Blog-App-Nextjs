@@ -1,5 +1,5 @@
 import CoverImage from "@/app/blogs/_components/CoverImage";
-import { Post } from "@/app/blogs/type";
+import { Post } from "@/types/common";
 import Author from "@/ui/Author/Author";
 
 interface RelatedPostProps {

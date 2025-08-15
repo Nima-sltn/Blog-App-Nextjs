@@ -1,23 +1,5 @@
+import { User } from "@/types/common";
 import { NextRequest } from "next/server";
-
-interface User {
-  statusCode: number;
-  data: {
-    message: string;
-    user: {
-      _id: string;
-      name: string;
-      email: string;
-      bookmarkedPosts: string[];
-      likedPosts: string[];
-      avatar: string;
-      createdAt: string; // ISO date string
-      updatedAt: string; // ISO date string
-      __v: number;
-      avatarUrl: string;
-    };
-  };
-}
 
 export async function middlewareAuth(req: NextRequest): Promise<User | null> {
   const accessToken = req.cookies.get("accessToken");

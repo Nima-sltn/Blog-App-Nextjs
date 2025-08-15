@@ -1,6 +1,5 @@
 "use client";
 import { FC } from "react";
-import { Post } from "../type";
 import ButtonIcon from "@/ui/ButtonIcon/ButtonIcon";
 import {
   BookmarkIcon,
@@ -15,6 +14,7 @@ import { toPersianDigits } from "@/utils/numberFormatter";
 import { bookmarkPostApi, likePostApi } from "@/services/postServices";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { Post } from "@/types/common";
 
 interface PostInteractionProps {
   post: Post;
