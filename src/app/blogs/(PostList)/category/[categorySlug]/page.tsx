@@ -1,13 +1,21 @@
 import PostList from "@/app/blogs/_components/PostList";
+import { getPosts } from "@/services/postServices";
+import setCookiesOnReq from "@/utils/setCookieOnReq";
+import queryString from "query-string";
 
-const Category = async ({ params }: { params: any }) => {
+type SearchParams = Record<string, string | string[] | undefined>;
+interface CategoryPageProps {
+  params: {
+    categorySlug: string;
+  };
+  searchParams: SearchParams;
+}
+const Category = async ({ params, searchParams }: CategoryPageProps) => {
   const { categorySlug } = params;
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/post/list?categorySlug=${categorySlug}`,
-  );
-  const { data } = await res.json();
-  const { posts } = data || {};
+  const queries = `${queryString.stringify(searchParams)}&categorySlug=${categorySlug}`;
+  const options = await setCookiesOnReq();
+  const posts = await getPosts(queries, options);
 
   return (
     <>

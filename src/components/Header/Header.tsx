@@ -18,8 +18,6 @@ const navLinks = [
 function Header() {
   const { user, isLoading } = useAuth();
 
-  console.log(user);
-
   return (
     <header
       className={`sticky top-0 z-10 mb-10 border-b border-b-secondary-300 bg-inherit shadow-md transition-all duration-200 ${isLoading && "opacity-80 blur-sm"}`}

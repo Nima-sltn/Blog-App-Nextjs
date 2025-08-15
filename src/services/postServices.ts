@@ -9,10 +9,13 @@ export const getPostBySlug = async (slug: string) => {
   return post;
 };
 
-export const getPosts = async (options?: RequestInit) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/post/list`, {
-    ...options,
-  });
+export const getPosts = async (queries: string, options?: RequestInit) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/post/list?${queries}`,
+    {
+      ...options,
+    },
+  );
   const { data } = await res.json();
   return data?.posts;
 };
