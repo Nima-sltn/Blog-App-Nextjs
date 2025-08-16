@@ -1,10 +1,10 @@
-import { Post } from "../type";
 import CoverImage from "./CoverImage";
 import Link from "next/link";
 import { ClockIcon } from "@heroicons/react/24/outline";
 import Author from "@/ui/Author/Author";
 import PostInteraction from "./PostInteraction";
 import { toPersianDigits } from "@/utils/numberFormatter";
+import { Post } from "@/types/common";
 
 const PostList = async ({ posts }: any) => {
   // await new Promise((res) => setTimeout(res, 3000));

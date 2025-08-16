@@ -1,6 +1,7 @@
 "use client";
 import { useAuth } from "@/context/AuthContext";
 import NavLink from "../NavLink/NavLink";
+import DarkModeToggle from "../DarkModeToggle/DarkModeToggle";
 
 const navLinks = [
   {
@@ -33,13 +34,20 @@ function Header() {
               );
             })}
           </div>
-          <li>
-            {user ? (
-              <NavLink path="/profile">پروفایل</NavLink>
-            ) : (
-              <NavLink path="/signin">ورود</NavLink>
-            )}
-          </li>
+          <ul className="flex items-center gap-4">
+            <li>
+              {user ? (
+                <NavLink path="/profile">پروفایل</NavLink>
+              ) : (
+                <NavLink path="/signin">ورود</NavLink>
+              )}
+            </li>
+
+            <li className="flex">
+              <DarkModeToggle />
+            </li>
+            <li className="flex">{/* <Logout /> */}</li>
+          </ul>
         </ul>
       </nav>
     </header>

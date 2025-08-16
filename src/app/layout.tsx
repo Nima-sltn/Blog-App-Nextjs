@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Header from "@/components/Header/Header";
 import { Toaster } from "react-hot-toast";
 import AuthProvider from "@/context/AuthContext";
+import { DarkModeProvider } from "@/context/DarkModeContext";
 
 export const metadata: Metadata = {
   title: {
@@ -21,11 +22,13 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl">
       <body className={`${vazirFont.variable} min-h-screen font-sans`}>
-        <AuthProvider>
-          <Toaster />
-          <Header />
-          <div className="container xl:max-w-screen-xl"> {children}</div>
-        </AuthProvider>
+        <DarkModeProvider>
+          <AuthProvider>
+            <Toaster />
+            <Header />
+            <div className="container xl:max-w-screen-xl"> {children}</div>
+          </AuthProvider>
+        </DarkModeProvider>
       </body>
     </html>
   );

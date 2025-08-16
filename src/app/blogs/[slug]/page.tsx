@@ -1,7 +1,9 @@
 import { getPostBySlug, getPosts } from "@/services/postServices";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { Post } from "../type";
+import RelatedPost from "@/components/RelatedPost/RelatedPost";
+import { Post } from "@/types/common";
+import BlogComments from "../_components/comment/BlogComments";
 
 export const dynamicParams = false;
 
@@ -38,8 +40,8 @@ const singlePost = async ({ params }: { params: any }) => {
           src={post.coverImageUrl}
         />
       </div>
-      {/* {post.related.length > 0 ? <RelatedPost posts={post.related} /> : null}
-      <BlogComments post={post} /> */}
+      {post.related.length > 0 ? <RelatedPost posts={post.related} /> : null}
+      <BlogComments post={post} />
     </div>
   );
 };

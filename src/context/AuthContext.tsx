@@ -1,6 +1,7 @@
 "use client";
 
 import { getUserApi, signinApi, signupApi } from "@/services/authService";
+import { User } from "@/types/common";
 import { useRouter } from "next/navigation";
 import {
   createContext,
@@ -12,24 +13,6 @@ import {
 import toast from "react-hot-toast";
 
 // --------- Types ---------
-interface User {
-  statusCode: number;
-  data: {
-    message: string;
-    user: {
-      _id: string;
-      name: string;
-      email: string;
-      bookmarkedPosts: string[];
-      likedPosts: string[];
-      avatar: string;
-      createdAt: string; // ISO date string
-      updatedAt: string; // ISO date string
-      __v: number;
-      avatarUrl: string;
-    };
-  };
-}
 
 interface AuthState {
   user: User | null;

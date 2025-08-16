@@ -14,7 +14,7 @@ const Avatar: FC<AvatarProps> = ({ src, width = 24, height = 24 }) => {
       width={width}
       height={height}
       className="ml-2 rounded-full ring-1 ring-secondary-300"
-      alt={src}
+      alt={src || "-"}
     />
   );
 };
