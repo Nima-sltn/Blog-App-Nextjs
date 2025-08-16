@@ -3,9 +3,9 @@ import { ChangeEvent } from "react";
 interface TextAreaProps {
   label: string;
   name: string;
-  value: string;
+  value?: string;
   dir?: "ltr" | "rtl";
-  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   isRequired?: boolean;
 }
 

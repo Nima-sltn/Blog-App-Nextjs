@@ -77,3 +77,14 @@ export interface User {
     };
   };
 }
+
+export interface StateType {
+  error?: string;
+  message?: string;
+}
+
+export interface CreateCommentProps {
+  formData: FormData;
+  postId: string;
+  parentId: string | null;
+}

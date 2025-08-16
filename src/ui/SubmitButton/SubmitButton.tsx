@@ -4,7 +4,6 @@ import { ButtonProps } from "../Button/type";
 import Button from "../Button/Button";
 import SvgComponent from "../SvgComponent/SvgComponent";
 
-
 interface SubmitButtonProps extends ButtonProps {
   children: ReactNode;
   className?: string;
@@ -23,8 +22,7 @@ export default function SubmitButton({
       disabled={pending}
       className={`flex items-center justify-center gap-x-4 py-4 ${className}`}
     >
-      {children}
-      {pending && <SvgComponent />}
+      {!pending ? children : <SvgComponent />}
     </Button>
   );
 }
