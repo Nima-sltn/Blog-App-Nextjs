@@ -1,7 +1,7 @@
-import PostList from "@/app/blogs/_components/PostList";
 import { getPosts } from "@/services/postServices";
 import setCookiesOnReq from "@/utils/setCookieOnReq";
 import queryString from "query-string";
+import PostList from "../../../_components/PostList";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 interface CategoryPageProps {
