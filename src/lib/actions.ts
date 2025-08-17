@@ -15,7 +15,6 @@ export const createComment = async (
     parentId,
     text: formData.get("text") as string,
   };
-  console.log(rawFormData);
 
   try {
     const { data } = await createCommentApi(rawFormData, options);
