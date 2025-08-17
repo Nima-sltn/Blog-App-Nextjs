@@ -22,13 +22,10 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl">
       <body className={`${vazirFont.variable} min-h-screen font-sans`}>
-        <DarkModeProvider>
-          <AuthProvider>
-            <Toaster />
-            <Header />
-            <div className="container xl:max-w-screen-xl"> {children}</div>
-          </AuthProvider>
-        </DarkModeProvider>
+        <Toaster />
+        <AuthProvider>
+          <DarkModeProvider>{children}</DarkModeProvider>
+        </AuthProvider>
       </body>
     </html>
   );
