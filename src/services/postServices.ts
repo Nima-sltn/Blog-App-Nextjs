@@ -20,6 +20,12 @@ export const getPosts = async (queries?: string, options?: RequestInit) => {
   return data?.posts;
 };
 
+export async function deletePostApi(id: string, options?: any) {
+  return http
+    .delete(`/post/remove/${id}`, options)
+    .then(({ data }) => data.data);
+}
+
 export const likePostApi = async (postId: any) => {
   return http.post(`/post/like/${postId}`).then(({ data }) => data.data);
 };
