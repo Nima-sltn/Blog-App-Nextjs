@@ -40,7 +40,7 @@ export interface Post {
   title: string;
   slug: string;
   category: PostCategory;
-  type: string;
+  type: "free" | "premium";
   briefText: string;
   text: string;
   coverImage: string;

@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import CardWrapper from "./_/components/CardWrapper";
-import LatestPosts from "./_/components/LatestPosts";
 import Fallback from "@/components/Fallback/fallback";
 
 async function Profile() {
