@@ -34,7 +34,7 @@ function Header() {
               );
             })}
           </div>
-          <ul className="flex items-center gap-4">
+          <div className="flex items-center gap-4">
             <li>
               {user ? (
                 <NavLink path="/profile">پروفایل</NavLink>
@@ -46,8 +46,8 @@ function Header() {
             <li className="flex">
               <DarkModeToggle />
             </li>
-            <li className="flex">{/* <Logout /> */}</li>
-          </ul>
+            {/* <li className="flex"> <Logout /> </li> */}
+          </div>
         </ul>
       </nav>
     </header>
