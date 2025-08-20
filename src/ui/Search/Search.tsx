@@ -16,7 +16,7 @@ export default function Search() {
     const searchValue = (formData.get("search") as string) || "";
 
     const newParams = new URLSearchParams(searchParams.toString());
-    // newParams.set("page", "1");
+    newParams.set("page", "1");
 
     if (searchValue) {
       newParams.set("search", searchValue);
@@ -36,7 +36,7 @@ export default function Search() {
         placeholder="جستجو ..."
         autoComplete="off"
         defaultValue={searchParams?.get("search") ?? ""}
-        className="textField__input py-3 text-xs bg-secondary-0"
+        className="textField__input bg-secondary-0 py-3 text-xs"
       />
       <button
         type="submit"
