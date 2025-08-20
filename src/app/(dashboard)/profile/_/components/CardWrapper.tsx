@@ -3,7 +3,7 @@ import { Card } from "./Cards";
 
 async function CardWrapper() {
   const { numberOfComments, numberOfPosts, numberOfUsers } =
-    await fetchCardData(); // no type complaints
+    await fetchCardData(); 
 
   return (
     <div className="mb-8 grid gap-6 md:grid-cols-3">

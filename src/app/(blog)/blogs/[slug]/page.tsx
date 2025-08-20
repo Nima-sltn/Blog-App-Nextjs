@@ -8,7 +8,7 @@ import BlogComments from "../_components/comment/BlogComments";
 export const dynamicParams = false;
 
 export const generateStaticParams = async () => {
-  const posts = await getPosts();
+  const {posts} = await getPosts();
   const slugs = posts.map((post: Post) => ({ slug: post.slug }));
   return slugs;
 };
