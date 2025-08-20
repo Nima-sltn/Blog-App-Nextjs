@@ -28,9 +28,13 @@ const PostPage = async ({
       <Suspense fallback={<Spinner />} key={query}>
         <PostsTable query={query} />
       </Suspense>
-      <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={totalPages} />
-      </div>
+      {!totalPages ? (
+        ""
+      ) : (
+        <div className="mt-5 flex w-full justify-center">
+          <Pagination totalPages={totalPages} />
+        </div>
+      )}
     </div>
   );
 };
