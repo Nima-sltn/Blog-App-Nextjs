@@ -1,6 +1,6 @@
 "use client";
 import useLocalStorageState from "@/hook/useLocalStorage";
-import { createContext, useContext, useEffect, ReactNode } from "react";
+import { createContext, useContext, ReactNode } from "react";
 
 interface DarkModeContextType {
   isDarkMode: boolean;
@@ -11,30 +11,27 @@ const DarkModeContext = createContext<DarkModeContextType | undefined>(
   undefined,
 );
 
-interface DarkModeProviderProps {
-  children: ReactNode;
-}
+export function DarkModeProvider({ children }: { children: ReactNode }) {
+  // Safe default: read from DOM class instead of window.matchMedia
+  const root =
+    typeof document !== "undefined" ? document.documentElement : null;
+  const initial = root?.classList.contains("dark-mode") ?? false;
 
-export function DarkModeProvider({ children }: DarkModeProviderProps) {
   const [isDarkMode, setIsDarkMode] = useLocalStorageState(
     "isDarkMode",
-    typeof window !== "undefined"
-      ? window.matchMedia("(prefers-color-scheme: dark)").matches
-      : false,
+    initial,
   );
 
-  const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (!isDarkMode) {
-      root.classList.add("dark-mode");
-      root.classList.remove("light-mode");
-    } else {
-      root.classList.add("light-mode");
-      root.classList.remove("dark-mode");
-    }
-  }, [isDarkMode]);
+  const toggleDarkMode = () => {
+    setIsDarkMode((prev) => {
+      const next = !prev;
+      if (root) {
+        root.classList.toggle("dark-mode", next);
+        root.classList.toggle("light-mode", !next);
+      }
+      return next;
+    });
+  };
 
   return (
     <DarkModeContext.Provider value={{ isDarkMode, toggleDarkMode }}>

@@ -20,7 +20,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fa" dir="rtl">
+    <html lang="fa" dir="rtl" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const stored = localStorage.getItem("isDarkMode");
+                  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                  const isDark = stored ? JSON.parse(stored) : prefersDark;
+                  document.documentElement.classList.add(isDark ? "dark-mode" : "light-mode");
+                } catch (_) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className={`${vazirFont.variable} min-h-screen font-sans`}>
         <Toaster />
         <AuthProvider>
