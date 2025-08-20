@@ -1,4 +1,5 @@
-import CoverImage from "@/app/blogs/_components/CoverImage";
+
+import CoverImage from "@/app/(blog)/blogs/_components/CoverImage";
 import { Post } from "@/types/common";
 import Author from "@/ui/Author/Author";
 
