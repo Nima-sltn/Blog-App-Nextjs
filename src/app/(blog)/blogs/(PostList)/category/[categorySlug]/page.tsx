@@ -15,7 +15,7 @@ const Category = async ({ params, searchParams }: CategoryPageProps) => {
 
   const queries = `${queryString.stringify(searchParams)}&categorySlug=${categorySlug}`;
   const options = await setCookiesOnReq();
-  const posts = await getPosts(queries, options);
+  const {posts} = await getPosts(queries, options);
 
   return (
     <>

@@ -9,6 +9,12 @@ export const getPostBySlug = async (slug: string) => {
   return post;
 };
 
+export async function getAllPostsApi(queries: string, options = {}) {
+  return http
+    .get(`/post/list?${queries}`, options)
+    .then(({ data }) => data.data);
+}
+
 export const getPosts = async (queries?: string, options?: RequestInit) => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/post/list?${queries}`,
@@ -17,7 +23,8 @@ export const getPosts = async (queries?: string, options?: RequestInit) => {
     },
   );
   const { data } = await res.json();
-  return data?.posts;
+  const { posts, totalPages } = data || {};
+  return { posts, totalPages };
 };
 
 export async function deletePostApi(id: string, options?: any) {

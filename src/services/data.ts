@@ -22,7 +22,7 @@ export const fetchCardData = async (): Promise<CardData> => {
 
     const numberOfUsers = Number(data[0].users.length ?? "0");
     const numberOfComments = Number(data[1].data.commentsCount ?? "0");
-    const numberOfPosts = Number(data[2].length ?? "0");
+    const numberOfPosts = Number(data[2].posts.length ?? "0");
 
     return {
       numberOfUsers,
@@ -32,5 +32,14 @@ export const fetchCardData = async (): Promise<CardData> => {
   } catch (error: any) {
     toast.error(error.response.data.message);
     throw error;
+  }
+};
+
+export const fetchLatestPosts = async () => {
+  try {
+    const { posts } = await getPosts("sort=latest&limit=5");
+    return posts;
+  } catch (error: any) {
+    return new Error(error?.response?.data?.message);
   }
 };

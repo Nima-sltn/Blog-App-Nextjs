@@ -1,11 +1,12 @@
-import { getPosts } from "@/services/postServices";
+import { getAllPostsApi, getPosts } from "@/services/postServices";
 import Empty from "@/ui/Empty/Empty";
 import Table from "@/ui/Table/Table";
 import PostRow from "./PostRow";
 import { Post } from "@/types/common";
 
-async function PostsTable() {
-  const posts: Post[] = await getPosts();
+async function PostsTable({ query = "" }) {
+  const { posts }: { posts: Post[] } = await getAllPostsApi(query);
+  console.log(posts.length);
 
   if (!posts.length) return <Empty resourceName="پستی" />;
 

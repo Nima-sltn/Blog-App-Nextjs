@@ -8,7 +8,7 @@ type SearchParams = Record<string, string | string[] | undefined>;
 const BlogPage = async ({ searchParams }: { searchParams: SearchParams }) => {
   const queries = queryString.stringify(searchParams);
   const options = await setCookiesOnReq();
-  const posts = await getPosts(queries, options);
+  const {posts} = await getPosts(queries, options);
 
   const { search } = searchParams;
 
