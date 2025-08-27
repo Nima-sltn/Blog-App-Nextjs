@@ -7,8 +7,6 @@ import { toPersianDigits } from "@/utils/numberFormatter";
 import { Post } from "@/types/common";
 
 const PostList = async ({ posts }: any) => {
-  // await new Promise((res) => setTimeout(res, 3000));
-
   return posts.length > 0 ? (
     <div className="grid grid-cols-12 gap-8">
       {posts.map((post: Post) => (

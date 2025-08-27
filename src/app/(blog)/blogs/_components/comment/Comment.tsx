@@ -4,8 +4,8 @@ import Button from "@/ui/Button/Button";
 import { ArrowUturnRightIcon } from "@heroicons/react/24/outline";
 
 interface CommentProps {
-  comment: PostComment | PostCommentAnswer;
-  onAddComment?: () => void;
+  readonly comment: PostComment | PostCommentAnswer;
+  readonly onAddComment?: () => void;
 }
 
 function Comment({ comment, onAddComment }: CommentProps) {

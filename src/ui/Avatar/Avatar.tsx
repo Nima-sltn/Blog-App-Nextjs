@@ -3,8 +3,8 @@ import { FC } from "react";
 
 interface AvatarProps {
   src: string;
-  width?: number | undefined;
-  height?: number | undefined;
+  width?: number;
+  height?: number;
 }
 
 const Avatar: FC<AvatarProps> = ({ src, width = 24, height = 24 }) => {

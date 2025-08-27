@@ -1,4 +1,4 @@
-import { getAllPostsApi, getPosts } from "@/services/postServices";
+import { getAllPostsApi } from "@/services/postServices";
 import Empty from "@/ui/Empty/Empty";
 import Table from "@/ui/Table/Table";
 import PostRow from "./PostRow";

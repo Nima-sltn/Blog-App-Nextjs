@@ -2,12 +2,12 @@
 
 import React from "react";
 
-type ErrorProps = {
-  error: Error;
-  reset: () => void;
+type ErrorPageProps = {
+  readonly error: Error;
+  readonly reset: () => void;
 };
 
-function Error({ error, reset }: ErrorProps) {
+function ErrorPage({ error, reset }: ErrorPageProps) {
   return (
     <div className="container xl:max-w-screen-xl">
       <div className="flex justify-center pt-10">
@@ -27,4 +27,4 @@ function Error({ error, reset }: ErrorProps) {
   );
 }
 
-export default Error;
+export default ErrorPage;

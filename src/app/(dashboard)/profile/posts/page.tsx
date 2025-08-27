@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import PostsTable from "./_/components/PostsTable";
-import Fallback from "@/components/Fallback/fallback";
 import queryString from "query-string";
 import Search from "@/ui/Search/Search";
 import { CreatePost } from "./_/components/Buttons";

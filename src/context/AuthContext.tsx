@@ -9,6 +9,7 @@ import {
   useReducer,
   ReactNode,
   useEffect,
+  useMemo,
 } from "react";
 import toast from "react-hot-toast";
 
@@ -38,7 +39,7 @@ interface AuthContextType {
 }
 
 interface AuthProviderProps {
-  children: ReactNode;
+  readonly children: ReactNode;
 }
 
 // --------- Initial State ---------
@@ -133,21 +134,19 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     getUser();
   }, []);
-
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isAuthenticated,
-        isLoading,
-        signin,
-        signup,
-        getUser,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo(
+    () => ({
+      user,
+      isAuthenticated,
+      isLoading,
+      signin,
+      signup,
+      getUser,
+    }),
+    [user, isAuthenticated, isLoading],
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 // --------- Hook ---------
