@@ -21,6 +21,8 @@ const Drawer = ({ open, onClose, children }: DrawerProps) => {
     <>
       {/* overlay */}
       <div
+        role="presentation"
+        aria-hidden="true"
         className={`fixed inset-0 h-screen w-full bg-secondary-800 bg-opacity-30 backdrop-blur-sm duration-200 ease-in-out ${
           open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
