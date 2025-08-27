@@ -12,12 +12,12 @@ import { usePathname, useRouter } from "next/navigation";
 import CommentForm from "./CommentForm";
 
 interface BlogCommentsProps {
-  post: Post;
+  readonly post: Post;
 }
 
 function BlogComments({ post: { comments, _id: postId } }: BlogCommentsProps) {
   const { user } = useAuth();
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [parent, setParent] = useState<PostComment | null>(null);
   const router = useRouter();
   const pathname = usePathname();
@@ -28,7 +28,7 @@ function BlogComments({ post: { comments, _id: postId } }: BlogCommentsProps) {
       return;
     }
     setParent(parent);
-    setOpen(true);
+    setIsOpen(true);
   };
 
   return (
@@ -47,12 +47,12 @@ function BlogComments({ post: { comments, _id: postId } }: BlogCommentsProps) {
           title={parent ? "پاسخ به نظر" : "نظر جدید"}
           description={parent ? parent.user.name : "نظر خود را وارد کنید"}
           open={isOpen}
-          onClose={() => setOpen(false)}
+          onClose={() => setIsOpen(false)}
         >
           <CommentForm
             postId={postId}
             parentId={parent ? parent._id : null}
-            onClose={() => setOpen(false)}
+            onClose={() => setIsOpen(false)}
           />
         </Modal>
       </div>

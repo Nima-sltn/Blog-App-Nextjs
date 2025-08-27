@@ -1,6 +1,3 @@
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
-import classNames from "classnames";
-// import { DeletePost, UpdatePost } from "./Buttons";
 import Table from "@/ui/Table/Table";
 import { FC } from "react";
 import { Post } from "@/types/common";

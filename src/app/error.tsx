@@ -3,8 +3,8 @@
 import React from "react";
 
 type ErrorPageProps = {
-  error: Error;
-  reset: () => void;
+  readonly error: Error;
+  readonly reset: () => void;
 };
 
 function ErrorPage({ error, reset }: ErrorPageProps) {

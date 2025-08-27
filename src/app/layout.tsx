@@ -1,7 +1,6 @@
 import vazirFont from "@/constants/localFonts";
 import "../styles/globals.css";
 import type { Metadata } from "next";
-import Header from "@/components/Header/Header";
 import { Toaster } from "react-hot-toast";
 import AuthProvider from "@/context/AuthContext";
 import { DarkModeProvider } from "@/context/DarkModeContext";

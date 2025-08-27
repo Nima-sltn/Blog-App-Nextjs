@@ -3,7 +3,6 @@
 import { deletePostApi } from "@/services/postServices";
 import setCookiesOnReq from "@/utils/setCookieOnReq";
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
 
 interface DeletePostParams {
   postId: string;

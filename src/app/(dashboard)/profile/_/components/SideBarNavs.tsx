@@ -7,7 +7,7 @@ import {
 } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const sidebarNavs = [
   {
@@ -44,7 +44,6 @@ const sidebarNavs = [
 ];
 
 export default function SideBarNavs() {
-  const router = useRouter();
   const pathname = usePathname();
   return (
     <ul className="space-y-2">

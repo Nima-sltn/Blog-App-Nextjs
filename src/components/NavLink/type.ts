@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
 export interface NavLinkProps {
-  path: string;
-  children: ReactNode;
+  readonly path: string;
+  readonly children: ReactNode;
 }

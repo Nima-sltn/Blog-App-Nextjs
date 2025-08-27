@@ -1,6 +1,5 @@
 "use client";
 
-import { useAuth } from "@/context/AuthContext";
 import {
   ArrowLeftStartOnRectangleIcon,
   HomeIcon,
@@ -11,16 +10,10 @@ import SideBarNavs from "./SideBarNavs";
 import ButtonIcon from "@/ui/ButtonIcon/ButtonIcon";
 
 interface SideBarProps {
-  onClose?: () => void;
+  readonly onClose?: () => void;
 }
 
 function SideBar({ onClose }: SideBarProps) {
-  //   const { logout } = useAuth();
-
-  // const logoutHandler = async () => {
-  //   await logout;
-  // };
-
   return (
     <div className="flex h-screen flex-col overflow-y-auto p-5 pt-10 lg:pt-8">
       {/* Sidebar header */}

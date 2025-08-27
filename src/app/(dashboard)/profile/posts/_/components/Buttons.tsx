@@ -7,7 +7,6 @@ import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import ButtonIcon from "@/ui/ButtonIcon/ButtonIcon";
 import Modal from "@/ui/Modal/Modal";
 import deletePost from "../actions/deletePost";
-import { useFormState } from "react-dom";
 import ConfirmDelete from "@/ui/ConfirmDelete/ConfirmDelete";
 
 export const CreatePost: FC = () => {

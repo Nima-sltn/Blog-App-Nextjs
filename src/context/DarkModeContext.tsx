@@ -1,6 +1,6 @@
 "use client";
 import useLocalStorageState from "@/hook/useLocalStorage";
-import { createContext, useContext, ReactNode } from "react";
+import { createContext, useContext, ReactNode, useMemo } from "react";
 
 interface DarkModeContextType {
   isDarkMode: boolean;
@@ -11,8 +11,11 @@ const DarkModeContext = createContext<DarkModeContextType | undefined>(
   undefined,
 );
 
-export function DarkModeProvider({ children }: { children: ReactNode }) {
-  // Safe default: read from DOM class instead of window.matchMedia
+export function DarkModeProvider({
+  children,
+}: {
+  readonly children: ReactNode;
+}) {
   const root =
     typeof document !== "undefined" ? document.documentElement : null;
   const initial = root?.classList.contains("dark-mode") ?? false;
@@ -33,8 +36,10 @@ export function DarkModeProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const value = useMemo(() => ({ isDarkMode, toggleDarkMode }), [isDarkMode]);
+
   return (
-    <DarkModeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
+    <DarkModeContext.Provider value={value}>
       {children}
     </DarkModeContext.Provider>
   );

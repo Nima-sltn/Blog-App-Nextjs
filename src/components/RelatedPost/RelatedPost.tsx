@@ -1,10 +1,9 @@
-
 import CoverImage from "@/app/(blog)/blogs/_components/CoverImage";
 import { Post } from "@/types/common";
 import Author from "@/ui/Author/Author";
 
 interface RelatedPostProps {
-  posts: Post[];
+  readonly posts: Post[];
 }
 
 function RelatedPost({ posts }: RelatedPostProps) {
