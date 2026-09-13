@@ -5,24 +5,36 @@ const app = axios.create({
   withCredentials: true,
 });
 
+const toError = (error: unknown): Error => {
+  if (error instanceof Error) {
+    return error;
+  }
+
+  if (axios.isAxiosError(error)) {
+    return new Error(error.message);
+  }
+
+  return new Error(String(error));
+};
+
 app.interceptors.request.use(
   (config) => config,
-  (error) => Promise.reject(error),
+  (error) => Promise.reject(toError(error)),
 );
 
 app.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    const originalConfig = error.config as AxiosRequestConfig & {
-      _retry?: boolean;
-    };
+    const originalConfig = error.config;
 
     if (
       error.response?.status === 401 &&
       originalConfig &&
-      !originalConfig._retry
+      !("_retry" in originalConfig)
     ) {
-      originalConfig._retry = true;
+      (originalConfig as AxiosRequestConfig & { _retry?: boolean })._retry =
+        true;
+
       try {
         const { data } = await axios.get(
           `${process.env.NEXT_PUBLIC_BASE_URL}/user/refresh-token`,
@@ -32,14 +44,14 @@ app.interceptors.response.use(
         );
 
         if (data) {
-          // Retry original request with new token
           return app(originalConfig);
         }
       } catch (refreshError) {
-        return Promise.reject(refreshError);
+        return Promise.reject(toError(refreshError));
       }
     }
-    return Promise.reject(error);
+
+    return Promise.reject(toError(error));
   },
 );
 
