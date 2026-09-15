@@ -5,15 +5,15 @@ import Button from "../Button/Button";
 import SvgComponent from "../SvgComponent/SvgComponent";
 
 interface SubmitButtonProps extends ButtonProps {
-  children: ReactNode;
-  className?: string;
+  readonly children: ReactNode;
+  readonly className?: string;
 }
 
 export default function SubmitButton({
   children,
   className = "",
   ...props
-}: SubmitButtonProps) {
+}: Readonly<SubmitButtonProps>) {
   const { pending } = useFormStatus();
 
   return (

@@ -27,6 +27,10 @@ export const getPosts = async (queries?: string, options?: RequestInit) => {
   return { posts, totalPages };
 };
 
+export async function editPostApi({ id, data }: any) {
+  return http.patch(`/post/update/${id}`, data).then(({ data }) => data.data);
+}
+
 export async function deletePostApi(id: string, options?: any) {
   return http
     .delete(`/post/remove/${id}`, options)
