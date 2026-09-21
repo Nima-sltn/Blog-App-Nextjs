@@ -11,7 +11,6 @@ import Drawer from "@/ui/Drawer/Drawer";
 function Header() {
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const { user, isLoading } = useAuth();
-  console.log(user);
 
   return (
     <header
@@ -21,30 +20,26 @@ function Header() {
         <ButtonIcon
           className="block border-none lg:hidden"
           variant="outline"
+          aria-expanded={isOpenDrawer}
+          aria-label={isOpenDrawer ? "بستن منو" : "باز کردن منو"}
           onClick={() => setIsOpenDrawer(!isOpenDrawer)}
         >
           {isOpenDrawer ? <XMarkIcon /> : <Bars3Icon />}
         </ButtonIcon>
-        {/* <div className="flex items-center gap-x-3"> */}
-        {/* <div className="flex flex-col justify-start gap-x-2 lg:flex-row lg:items-center"> */}
         <span className="text-sm font-bold text-secondary-700 lg:text-lg">
           سلام؛ {user?.name}
         </span>
-        {/* </div> */}
-        {/* </div> */}
         <div className="flex items-center gap-x-3">
           <Link href="/profile">
-            {/* <ButtonIcon
-              variant="outline"
-              className={`border-secondaray-200 flex cursor-pointer items-center justify-center rounded-2xl`}
-            > */}
             <Avatar src={user?.avatarUrl} />
-            {/* </ButtonIcon> */}
-
-            <Drawer open={isOpenDrawer} onClose={() => setIsOpenDrawer(false)}>
-              <SideBar onClose={() => setIsOpenDrawer(false)} />
-            </Drawer>
           </Link>
+
+          <Drawer
+            open={isOpenDrawer}
+            onClose={() => setIsOpenDrawer(false)}
+          >
+            <SideBar onClose={() => setIsOpenDrawer(false)} />
+          </Drawer>
         </div>
       </div>
     </header>

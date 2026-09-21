@@ -23,6 +23,8 @@ const eslintConfig = [
     },
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
+      // Ensure every Promise rejection carries an Error instance.
+      "prefer-promise-reject-errors": "error",
     },
   },
 ];
