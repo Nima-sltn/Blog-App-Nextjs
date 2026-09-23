@@ -18,7 +18,7 @@ interface CardProps {
   type: CardType;
 }
 
-export function Card({ title, value, type }: CardProps) {
+export function Card({ title, value, type }: Readonly<CardProps>) {
   const Icon = iconMap[type];
 
   return (

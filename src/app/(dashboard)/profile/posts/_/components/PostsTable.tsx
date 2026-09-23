@@ -8,7 +8,7 @@ interface PostsTableProps {
   query?: string;
 }
 
-async function PostsTable({ query = "" }: PostsTableProps) {
+async function PostsTable({ query = "" }: Readonly<PostsTableProps>) {
   const { posts }: { posts: Post[] } = await getAllPostsApi(query);
 
   if (!posts.length) return <Empty resourceName="پستی" />;

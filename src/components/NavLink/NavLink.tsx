@@ -8,7 +8,7 @@ import { NavLinkProps } from "./type";
  * Navigation link that highlights itself when it matches the current route
  * and announces its active state to assistive technology via `aria-current="page"`.
  */
-function NavLink({ path, children }: NavLinkProps) {
+function NavLink({ path, children }: Readonly<NavLinkProps>) {
   const pathname = usePathname();
   const isActive = pathname === path;
 

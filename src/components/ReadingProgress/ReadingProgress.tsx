@@ -5,9 +5,8 @@ import { useEffect, useState } from "react";
 /**
  * Thin reading-progress bar shown at the top of a post.
  *
- * Fills from the right (RTL) as the reader scrolls through the document and
- * exposes its value via `role="progressbar"` for assistive technology. Uses
- * `requestAnimationFrame`-throttled scroll events to stay jank-free.
+ * Fills from the right (RTL) as the reader scrolls through the document.
+ * Uses requestAnimationFrame-throttled scroll events to stay jank-free.
  */
 export default function ReadingProgress() {
   const [progress, setProgress] = useState(0);
@@ -19,38 +18,42 @@ export default function ReadingProgress() {
       const doc = document.documentElement;
       const scrollTop = doc.scrollTop || document.body.scrollTop;
       const scrollable = doc.scrollHeight - doc.clientHeight;
+
       const next = scrollable > 0 ? (scrollTop / scrollable) * 100 : 0;
+
       setProgress(Math.min(100, Math.max(0, next)));
+
       frame = 0;
     }
 
     function onScroll() {
-      if (!frame) frame = requestAnimationFrame(measure);
+      if (!frame) {
+        frame = requestAnimationFrame(measure);
+      }
     }
 
-    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll, {
+      passive: true,
+    });
+
     measure();
 
     return () => {
       window.removeEventListener("scroll", onScroll);
-      if (frame) cancelAnimationFrame(frame);
+
+      if (frame) {
+        cancelAnimationFrame(frame);
+      }
     };
   }, []);
 
   return (
-    <div
-      className="fixed inset-x-0 top-0 z-20 h-1 bg-secondary-200"
-      role="progressbar"
+    <progress
+      className="fixed inset-x-0 top-0 z-20 h-1 w-full appearance-none overflow-hidden border-none bg-secondary-200 [&::-moz-progress-bar]:bg-primary-900 [&::-webkit-progress-bar]:bg-secondary-200 [&::-webkit-progress-value]:bg-primary-900"
+      value={progress}
+      max={100}
       aria-label="پیشرفت خواندن"
-      aria-valuenow={Math.round(progress)}
-      aria-valuemin={0}
-      aria-valuemax={100}
       dir="rtl"
-    >
-      <div
-        className="h-full bg-primary-900 transition-[width] duration-150 ease-out"
-        style={{ width: `${progress}%` }}
-      />
-    </div>
+    />
   );
 }
