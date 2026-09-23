@@ -48,7 +48,7 @@ export interface Post {
   readingTime: number;
   tags: string[];
   author: PostUser;
-  related: any[];
+  related: Post[];
   createdAt: string;
   updatedAt: string;
   __v: number;
@@ -59,23 +59,18 @@ export interface Post {
   commentsCount: number;
 }
 
+/** The authenticated user as stored in auth state (inner profile shape). */
 export interface User {
-  statusCode: number;
-  data: {
-    message: string;
-    user: {
-      _id: string;
-      name: string;
-      email: string;
-      bookmarkedPosts: string[];
-      likedPosts: string[];
-      avatar: string;
-      createdAt: string; // ISO date string
-      updatedAt: string; // ISO date string
-      __v: number;
-      avatarUrl: string;
-    };
-  };
+  _id: string;
+  name: string;
+  email: string;
+  bookmarkedPosts: string[];
+  likedPosts: string[];
+  avatar: string;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  __v: number;
+  avatarUrl: string;
 }
 
 export interface StateType {
@@ -87,4 +82,6 @@ export interface CreateCommentProps {
   formData: FormData;
   postId: string;
   parentId: string | null;
+  /** Slug of the post the comment belongs to — used to revalidate its page. */
+  slug: string;
 }

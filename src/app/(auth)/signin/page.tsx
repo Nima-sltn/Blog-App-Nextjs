@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import { SigninInput } from "@/types/api";
 
 const schema = yup.object({
   email: yup.string().email("ایمیل نامعتبر است").required("ایمیل الزامی است"),
@@ -28,7 +29,7 @@ const Signin = () => {
 
   const { signin } = useAuth();
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: SigninInput) => {
     await signin(values);
   };
 

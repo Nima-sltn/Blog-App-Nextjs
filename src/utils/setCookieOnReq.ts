@@ -1,6 +1,12 @@
 import { cookies } from "next/headers";
+import { AuthedRequestOptions } from "@/types/api";
 
-export default async function setCookiesOnReq(): Promise<RequestInit> {
+/**
+ * Builds request options that forward the auth cookies to the backend API.
+ * The returned object is assignable to both `fetch`'s `RequestInit` and the
+ * axios-based services' `AuthedRequestOptions`.
+ */
+export default async function setCookiesOnReq(): Promise<AuthedRequestOptions> {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("accessToken");
   const refreshToken = cookieStore.get("refreshToken");

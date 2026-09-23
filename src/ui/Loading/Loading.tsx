@@ -1,21 +1,14 @@
 "use client";
 
-import { ThreeDots } from "react-loader-spinner";
-
-function Loading({ width = "75", height = "10", color = "#4a6dff" }) {
+/**
+ * Inline loader used inside submit buttons.
+ * Rendered with the app's own `spinner-mini` CSS (dark-mode aware) instead
+ * of a third-party loader — the previous one both conflicted with React 19
+ * and rendered with `visible={false}` (never actually showed).
+ */
+function Loading() {
   return (
-    <ThreeDots
-      height={height}
-      width={width}
-      radius="9"
-      color="#fff"
-      ariaLabel="three-dots-loading"
-      wrapperStyle={{
-        display: "flex",
-        justifyContent: "center",
-      }}
-      visible={false}
-    />
+    <span className="spinner-mini" role="status" aria-label="در حال پردازش" />
   );
 }
 export default Loading;

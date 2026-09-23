@@ -1,6 +1,6 @@
 "use client";
 import useLocalStorageState from "@/hook/useLocalStorage";
-import { createContext, useContext, ReactNode, useMemo } from "react";
+import { createContext, useContext, ReactNode, useCallback, useMemo } from "react";
 
 interface DarkModeContextType {
   isDarkMode: boolean;
@@ -25,18 +25,20 @@ export function DarkModeProvider({
     initial,
   );
 
-  const toggleDarkMode = () => {
+  const toggleDarkMode = useCallback(() => {
     setIsDarkMode((prev) => {
       const next = !prev;
-      if (root) {
-        root.classList.toggle("dark-mode", next);
-        root.classList.toggle("light-mode", !next);
-      }
+      const root = document.documentElement;
+      root.classList.toggle("dark-mode", next);
+      root.classList.toggle("light-mode", !next);
       return next;
     });
-  };
+  }, [setIsDarkMode]);
 
-  const value = useMemo(() => ({ isDarkMode, toggleDarkMode }), [isDarkMode]);
+  const value = useMemo(
+    () => ({ isDarkMode, toggleDarkMode }),
+    [isDarkMode, toggleDarkMode],
+  );
 
   return (
     <DarkModeContext.Provider value={value}>

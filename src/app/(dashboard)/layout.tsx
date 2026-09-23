@@ -6,6 +6,10 @@ export const metadata = {
   description: "پروفایل",
 };
 
+// The dashboard is auth-protected and personalised — always render per
+// request instead of baking (possibly unauthenticated) HTML at build time.
+export const dynamic = "force-dynamic";
+
 const layout = ({
   children,
 }: Readonly<{
@@ -19,7 +23,10 @@ const layout = ({
         </aside>
         <div className="col-span-12 flex h-screen flex-col lg:col-span-9 xl:col-span-10">
           <Header />
-          <main className="flex-1 overflow-y-auto rounded-tr-3xl bg-secondary-100 p-4 md:p-6 lg:p-10">
+          <main
+            id="main-content"
+            className="flex-1 overflow-y-auto rounded-tr-3xl bg-secondary-100 p-4 md:p-6 lg:p-10"
+          >
             <div className="xl:max-w-screen-xl">{children}</div>
           </main>
         </div>

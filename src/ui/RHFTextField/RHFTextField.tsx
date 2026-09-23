@@ -3,7 +3,7 @@
 import React from "react";
 import { RHFTextFieldProps } from "./type";
 
-const RHFTextField = <TFormValues extends Record<string, any>>({
+const RHFTextField = <TFormValues extends Record<string, unknown>>({
   type = "text",
   label,
   name,
@@ -27,6 +27,7 @@ const RHFTextField = <TFormValues extends Record<string, any>>({
         type={type}
         id={name}
         dir={dir}
+        aria-required={isRequired || undefined}
         className={`textField__input ${dir === "ltr" ? "text-left" : "text-right"} ${hasError ? "textField--invalid" : ""}`}
         {...register(name, validationSchema)}
         {...rest}

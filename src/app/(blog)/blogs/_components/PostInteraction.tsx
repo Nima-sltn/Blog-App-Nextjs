@@ -1,5 +1,5 @@
 "use client";
-import { FC } from "react";
+import { FC, useEffect, useState, useTransition } from "react";
 import ButtonIcon from "@/ui/ButtonIcon/ButtonIcon";
 import {
   BookmarkIcon,
@@ -15,45 +15,80 @@ import { bookmarkPostApi, likePostApi } from "@/services/postServices";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { Post } from "@/types/common";
+import { getApiErrorMessage } from "@/utils/apiError";
 
 interface PostInteractionProps {
   post: Post;
 }
 
+/**
+ * Like / bookmark / comment-count controls with optimistic updates:
+ * state flips immediately for a snappy feel, then the server response
+ * reconciles it (and `router.refresh()` re-syncs the RSC tree). On failure
+ * the previous state is rolled back and the API error is toasted.
+ */
 const PostInteraction: FC<PostInteractionProps> = ({ post }) => {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [isLiked, setIsLiked] = useState(post.isLiked);
+  const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked);
 
-  const likeHandler = async (postId: any) => {
+  // Re-sync when the server sends fresh props (e.g. after router.refresh).
+  useEffect(() => setIsLiked(post.isLiked), [post.isLiked]);
+  useEffect(() => setIsBookmarked(post.isBookmarked), [post.isBookmarked]);
+
+  const likeHandler = async () => {
+    const previous = isLiked;
+    setIsLiked(!previous); // optimistic
     try {
-      const { message } = await likePostApi(postId);
+      const { message } = await likePostApi(post._id);
       toast.success(message);
-      router.refresh();
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message);
+      startTransition(() => router.refresh());
+    } catch (error) {
+      setIsLiked(previous); // rollback
+      toast.error(getApiErrorMessage(error));
     }
   };
 
-  const bookmarkHandler = async (postId: any) => {
+  const bookmarkHandler = async () => {
+    const previous = isBookmarked;
+    setIsBookmarked(!previous); // optimistic
     try {
-      const { message } = await bookmarkPostApi(postId);
+      const { message } = await bookmarkPostApi(post._id);
       toast.success(message);
-      router.refresh();
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message);
+      startTransition(() => router.refresh());
+    } catch (error) {
+      setIsBookmarked(previous); // rollback
+      toast.error(getApiErrorMessage(error));
     }
   };
 
   return (
     <div className="flex items-center gap-4">
-      <ButtonIcon variant="secondary">
+      <ButtonIcon
+        variant="secondary"
+        aria-label={`${toPersianDigits(post.commentsCount)} دیدگاه`}
+      >
         <ChatBubbleOvalLeftEllipsisIcon />
         <span>{toPersianDigits(post.commentsCount)}</span>
       </ButtonIcon>
-      <ButtonIcon variant="red" onClick={() => likeHandler(post._id)}>
-        {post.isLiked ? <SolidHeartIcon /> : <HeartIcon />}
+      <ButtonIcon
+        variant="red"
+        aria-label={isLiked ? "حذف لایک" : "لایک کردن"}
+        aria-pressed={isLiked}
+        disabled={isPending}
+        onClick={likeHandler}
+      >
+        {isLiked ? <SolidHeartIcon /> : <HeartIcon />}
       </ButtonIcon>
-      <ButtonIcon variant="primary" onClick={() => bookmarkHandler(post._id)}>
-        {post.isBookmarked ? <SolidBookmarkIcon /> : <BookmarkIcon />}
+      <ButtonIcon
+        variant="primary"
+        aria-label={isBookmarked ? "حذف نشانک" : "نشانک گذاری"}
+        aria-pressed={isBookmarked}
+        disabled={isPending}
+        onClick={bookmarkHandler}
+      >
+        {isBookmarked ? <SolidBookmarkIcon /> : <BookmarkIcon />}
       </ButtonIcon>
     </div>
   );

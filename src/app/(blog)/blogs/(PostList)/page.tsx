@@ -5,12 +5,17 @@ import queryString from "query-string";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
-const BlogPage = async ({ searchParams }: { searchParams: SearchParams }) => {
-  const queries = queryString.stringify(searchParams);
-  const options = await setCookiesOnReq();
-  const {posts} = await getPosts(queries, options);
+interface BlogPageProps {
+  searchParams: Promise<SearchParams>;
+}
 
-  const { search } = searchParams;
+const BlogPage = async ({ searchParams }: BlogPageProps) => {
+  const resolvedSearchParams = await searchParams;
+  const queries = queryString.stringify(resolvedSearchParams);
+  const options = await setCookiesOnReq();
+  const { posts } = await getPosts(queries, options);
+
+  const { search } = resolvedSearchParams;
 
   return (
     <>

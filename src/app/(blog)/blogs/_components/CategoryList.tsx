@@ -12,17 +12,27 @@ export interface Category {
 }
 
 const CategoryList = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/category/list`, {
-    cache: "force-cache",
-  });
-  const {
-    data: { categories },
-  } = await res.json();
+  // Best-effort: the sidebar degrades to "no categories" rather than crashing
+  // the whole blog list when the API is briefly unavailable.
+  let categories: Category[] = [];
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/category/list`, {
+      cache: "force-cache",
+    });
+    if (res.ok) {
+      const body: { data?: { categories?: Category[] } } = await res.json();
+      categories = body.data?.categories ?? [];
+    }
+  } catch {
+    categories = [];
+  }
+
+  if (categories.length === 0) return null;
 
   return (
     <ul className="space-y-4">
       <Link href={`/blogs/`}>همه</Link>
-      {categories.map((category: Category) => {
+      {categories.map((category) => {
         return (
           <li key={category._id}>
             <Link href={`/blogs/category/${category.slug}`}>

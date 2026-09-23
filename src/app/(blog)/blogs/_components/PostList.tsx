@@ -6,10 +6,14 @@ import PostInteraction from "./PostInteraction";
 import { toPersianDigits } from "@/utils/numberFormatter";
 import { Post } from "@/types/common";
 
-const PostList = async ({ posts }: any) => {
+interface PostListProps {
+  posts: Post[];
+}
+
+const PostList = ({ posts }: PostListProps) => {
   return posts.length > 0 ? (
     <div className="grid grid-cols-12 gap-8">
-      {posts.map((post: Post) => (
+      {posts.map((post) => (
         <div
           className="col-span-12 rounded-lg border border-secondary-300 p-2 sm:col-span-6 lg:col-span-4"
           key={post._id}

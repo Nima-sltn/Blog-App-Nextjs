@@ -8,6 +8,7 @@ import ButtonIcon from "@/ui/ButtonIcon/ButtonIcon";
 import Modal from "@/ui/Modal/Modal";
 import deletePost from "../actions/deletePost";
 import ConfirmDelete from "@/ui/ConfirmDelete/ConfirmDelete";
+import { StateType } from "@/types/common";
 
 export const CreatePost: FC = () => {
   return (
@@ -41,10 +42,13 @@ interface DeletePostProps {
 }
 
 export const DeletePost: FC<DeletePostProps> = ({ id: postId, postTitle }) => {
-  const [state, formAction] = useActionState(deletePost, {
-    error: "",
-    message: "",
-  });
+  const [state, formAction] = useActionState<StateType, { postId: string }>(
+    deletePost,
+    {
+      error: "",
+      message: "",
+    },
+  );
 
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
@@ -71,8 +75,8 @@ export const DeletePost: FC<DeletePostProps> = ({ id: postId, postTitle }) => {
         <ConfirmDelete
           resourceName={postTitle}
           onClose={() => setIsDeleteOpen(false)}
-          onConfirm={async (formData) => {
-            await formAction({ formData, postId });
+          onConfirm={async () => {
+            await formAction({ postId });
           }}
         />
       </Modal>

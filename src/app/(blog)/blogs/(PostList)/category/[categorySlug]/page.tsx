@@ -4,18 +4,19 @@ import queryString from "query-string";
 import PostList from "../../../_components/PostList";
 
 type SearchParams = Record<string, string | string[] | undefined>;
-interface CategoryPageProps {
-  params: {
-    categorySlug: string;
-  };
-  searchParams: SearchParams;
-}
-const Category = async ({ params, searchParams }: CategoryPageProps) => {
-  const { categorySlug } = params;
 
-  const queries = `${queryString.stringify(searchParams)}&categorySlug=${categorySlug}`;
+interface CategoryPageProps {
+  params: Promise<{ categorySlug: string }>;
+  searchParams: Promise<SearchParams>;
+}
+
+const Category = async ({ params, searchParams }: CategoryPageProps) => {
+  const { categorySlug } = await params;
+  const resolvedSearchParams = await searchParams;
+
+  const queries = `${queryString.stringify(resolvedSearchParams)}&categorySlug=${categorySlug}`;
   const options = await setCookiesOnReq();
-  const {posts} = await getPosts(queries, options);
+  const { posts } = await getPosts(queries, options);
 
   return (
     <>

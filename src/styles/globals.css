@@ -148,6 +148,12 @@
   margin: 0;
 }
 
+/* Keyboard users must always see where focus is (WCAG 2.4.7). */
+:focus-visible {
+  outline: 2px solid rgb(var(--color-primary-900));
+  outline-offset: 2px;
+}
+
 html,
 body {
   padding: 0;

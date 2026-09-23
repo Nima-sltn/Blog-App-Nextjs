@@ -8,7 +8,9 @@ const layout = ({
   return (
     <>
       <Header />
-      <div className="container xl:max-w-screen-xl">{children}</div>
+      <main id="main-content" className="container xl:max-w-screen-xl">
+        {children}
+      </main>
     </>
   );
 };

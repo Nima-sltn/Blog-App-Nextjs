@@ -15,7 +15,9 @@ interface BlogCommentsProps {
   readonly post: Post;
 }
 
-function BlogComments({ post: { comments, _id: postId } }: BlogCommentsProps) {
+function BlogComments({
+  post: { comments, _id: postId, slug },
+}: BlogCommentsProps) {
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [parent, setParent] = useState<PostComment | null>(null);
@@ -52,6 +54,7 @@ function BlogComments({ post: { comments, _id: postId } }: BlogCommentsProps) {
           <CommentForm
             postId={postId}
             parentId={parent ? parent._id : null}
+            slug={slug}
             onClose={() => setIsOpen(false)}
           />
         </Modal>

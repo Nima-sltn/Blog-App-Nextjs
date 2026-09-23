@@ -10,35 +10,31 @@ import toast from "react-hot-toast";
 interface CommentFormProps {
   postId: string;
   parentId: string | null;
+  slug: string;
   onClose: () => void;
 }
 
 const initialState: StateType = { error: "", message: "" };
 
-const CommentForm = ({ postId, parentId, onClose }: CommentFormProps) => {
+const CommentForm = ({ postId, parentId, slug, onClose }: CommentFormProps) => {
   const [state, formAction] = useActionState<StateType, CreateCommentProps>(
     createComment,
     initialState,
   );
 
   useEffect(() => {
-    console.log(state);
-
     if (state?.message) {
-      console.log("hi");
-
       toast.success(state.message);
       onClose();
     }
     if (state?.error) {
-      console.log("hi");
       toast.error(state.error);
     }
   }, [state, onClose]);
 
   return (
     <form
-      action={(formData) => formAction({ formData, postId, parentId })}
+      action={(formData) => formAction({ formData, postId, parentId, slug })}
       className="space-y-7"
     >
       <TextArea name="text" label="متن نظر" isRequired />

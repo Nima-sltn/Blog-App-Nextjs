@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import { SignupInput } from "@/types/api";
 
 const schema = yup.object({
   name: yup
@@ -33,7 +34,7 @@ const Signup = () => {
 
   const { signup } = useAuth();
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: SignupInput) => {
     await signup(values);
   };
 

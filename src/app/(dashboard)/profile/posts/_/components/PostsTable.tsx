@@ -4,9 +4,12 @@ import Table from "@/ui/Table/Table";
 import PostRow from "./PostRow";
 import { Post } from "@/types/common";
 
-async function PostsTable({ query = "" }) {
+interface PostsTableProps {
+  query?: string;
+}
+
+async function PostsTable({ query = "" }: PostsTableProps) {
   const { posts }: { posts: Post[] } = await getAllPostsApi(query);
-  console.log(posts.length);
 
   if (!posts.length) return <Empty resourceName="پستی" />;
 

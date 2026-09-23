@@ -33,6 +33,7 @@ export default function Search() {
         key={searchParams?.get("search") ?? ""}
         type="text"
         name="search"
+        aria-label="جستجو در بلاگ ها"
         placeholder="جستجو ..."
         autoComplete="off"
         defaultValue={searchParams?.get("search") ?? ""}
@@ -40,6 +41,7 @@ export default function Search() {
       />
       <button
         type="submit"
+        aria-label="جستجو"
         className="absolute left-0 top-0 ml-3 flex h-full items-center"
       >
         <MagnifyingGlassIcon className="h-4 text-secondary-400" />

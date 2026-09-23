@@ -1,32 +1,86 @@
-import { getPostBySlug, getPosts } from "@/services/postServices";
+import { getPostBySlug } from "@/services/postServices";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import RelatedPost from "@/components/RelatedPost/RelatedPost";
-import { Post } from "@/types/common";
 import BlogComments from "../_components/comment/BlogComments";
+import ReadingProgress from "@/components/ReadingProgress/ReadingProgress";
+import { Metadata } from "next";
 
-export const dynamicParams = false;
+/**
+ * Posts are rendered on demand and cached for 5 minutes (ISR) instead of
+ * being baked at build time: the build no longer needs a live API, and posts
+ * published after a build are served immediately instead of 404-ing.
+ */
+export const revalidate = 300;
 
-export const generateStaticParams = async () => {
-  const {posts} = await getPosts();
-  const slugs = posts.map((post: Post) => ({ slug: post.slug }));
-  return slugs;
-};
+interface PostPageProps {
+  params: Promise<{ slug: string }>;
+}
 
-export const generateMetadata = async ({ params }: { params: any }) => {
-  const post = await getPostBySlug(params.slug);
+export const generateMetadata = async ({
+  params,
+}: PostPageProps): Promise<Metadata> => {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+
+  if (!post) return { title: "پستی یافت نشد" };
+
   return {
-    title: `${post.title}`,
+    title: post.title,
+    description: post.briefText,
+    openGraph: {
+      title: post.title,
+      description: post.briefText,
+      type: "article",
+      publishedTime: post.createdAt,
+      modifiedTime: post.updatedAt,
+      authors: [post.author.name],
+      images: [{ url: post.coverImageUrl }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.briefText,
+      images: [post.coverImageUrl],
+    },
   };
 };
 
-const singlePost = async ({ params }: { params: any }) => {
-  const post = await getPostBySlug(params.slug);
+const singlePost = async ({ params }: PostPageProps) => {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
 
   if (!post) notFound();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.briefText,
+    image: post.coverImageUrl,
+    datePublished: post.createdAt,
+    dateModified: post.updatedAt,
+    author: {
+      "@type": "Person",
+      name: post.author.name,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "بلاگ اپ",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${process.env.NEXT_PUBLIC_BASE_URL}/blogs/${post.slug}`,
+    },
+  };
+
   return (
     <div className="mx-auto max-w-screen-md text-secondary-600">
+      <ReadingProgress />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <h1 className="mb-8 text-2xl font-bold text-secondary-700">
         {post.title}
       </h1>

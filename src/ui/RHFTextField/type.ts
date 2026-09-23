@@ -5,7 +5,9 @@ import {
   Path,
 } from "react-hook-form";
 
-export type RHFTextFieldProps<TFormValues extends Record<string, any>> = {
+export type RHFTextFieldProps<
+  TFormValues extends Record<string, unknown>,
+> = {
   type?: React.HTMLInputTypeAttribute;
   label: string;
   name: Path<TFormValues>;

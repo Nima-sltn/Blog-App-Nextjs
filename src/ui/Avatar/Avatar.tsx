@@ -2,7 +2,7 @@ import Image from "next/image";
 import { FC } from "react";
 
 interface AvatarProps {
-  src: string;
+  src?: string;
   width?: number;
   height?: number;
 }

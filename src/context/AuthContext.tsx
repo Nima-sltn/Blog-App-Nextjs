@@ -1,10 +1,13 @@
 "use client";
 
 import { getUserApi, signinApi, signupApi } from "@/services/authService";
+import { SigninInput, SignupInput } from "@/types/api";
 import { User } from "@/types/common";
+import { getApiErrorMessage } from "@/utils/apiError";
 import { useRouter } from "next/navigation";
 import {
   createContext,
+  useCallback,
   useContext,
   useReducer,
   ReactNode,
@@ -33,8 +36,8 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  signin: (values: Record<string, unknown>) => Promise<void>;
-  signup: (values: Record<string, unknown>) => Promise<void>;
+  signin: (values: SigninInput) => Promise<void>;
+  signup: (values: SignupInput) => Promise<void>;
   getUser: () => Promise<void>;
 }
 
@@ -68,6 +71,7 @@ function authReducer(state: AuthState, action: AuthAction): AuthState {
     case "signup":
     case "user/loaded":
       return {
+        ...state,
         user: action.payload,
         isAuthenticated: true,
         isLoading: false,
@@ -89,51 +93,59 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     initialState,
   );
 
-  async function signin(values: Record<string, unknown>) {
-    dispatch({ type: "loading" });
+  const signin = useCallback(
+    async (values: SigninInput) => {
+      dispatch({ type: "loading" });
 
-    try {
-      const { message, user } = await signinApi(values);
-      dispatch({ type: "signin", payload: user });
-      toast.success(message);
-      router.push("/profile");
-    } catch (err: any) {
-      const error = err?.response?.data?.message || "Something went wrong";
-      dispatch({ type: "rejected", payload: error });
-      toast.error(error);
-    }
-  }
+      try {
+        const { message, user } = await signinApi(values);
+        dispatch({ type: "signin", payload: user });
+        toast.success(message);
+        router.push("/profile");
+        router.refresh();
+      } catch (err: unknown) {
+        const error = getApiErrorMessage(err);
+        dispatch({ type: "rejected", payload: error });
+        toast.error(error);
+      }
+    },
+    [router],
+  );
 
-  async function signup(values: Record<string, unknown>) {
-    dispatch({ type: "loading" });
+  const signup = useCallback(
+    async (values: SignupInput) => {
+      dispatch({ type: "loading" });
 
-    try {
-      const { message, user } = await signupApi(values);
-      dispatch({ type: "signup", payload: user });
-      toast.success(message);
-      router.push("/profile");
-    } catch (err: any) {
-      const error = err?.response?.data?.message || "Something went wrong";
-      dispatch({ type: "rejected", payload: error });
-      toast.error(error);
-    }
-  }
+      try {
+        const { message, user } = await signupApi(values);
+        dispatch({ type: "signup", payload: user });
+        toast.success(message);
+        router.push("/profile");
+        router.refresh();
+      } catch (err: unknown) {
+        const error = getApiErrorMessage(err);
+        dispatch({ type: "rejected", payload: error });
+        toast.error(error);
+      }
+    },
+    [router],
+  );
 
-  async function getUser() {
+  const getUser = useCallback(async () => {
     dispatch({ type: "loading" });
 
     try {
       const { user } = await getUserApi();
       dispatch({ type: "user/loaded", payload: user });
-    } catch (err: any) {
-      const error = err?.response?.data?.message || "Something went wrong";
-      dispatch({ type: "rejected", payload: error });
+    } catch (err: unknown) {
+      dispatch({ type: "rejected", payload: getApiErrorMessage(err) });
     }
-  }
+  }, []);
 
   useEffect(() => {
     getUser();
-  }, []);
+  }, [getUser]);
+
   const value = useMemo(
     () => ({
       user,
@@ -143,7 +155,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       signup,
       getUser,
     }),
-    [user, isAuthenticated, isLoading],
+    [user, isAuthenticated, isLoading, signin, signup, getUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

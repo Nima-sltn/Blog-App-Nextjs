@@ -22,9 +22,14 @@ const eslintConfig = [
       },
     },
     rules: {
-      "@typescript-eslint/no-explicit-any": "off",
+      // The codebase is fully typed — keep it that way.
+      "@typescript-eslint/no-explicit-any": "error",
       // Ensure every Promise rejection carries an Error instance.
       "prefer-promise-reject-errors": "error",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
     },
   },
 ];

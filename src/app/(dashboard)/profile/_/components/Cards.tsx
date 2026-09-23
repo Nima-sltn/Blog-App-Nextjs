@@ -4,13 +4,21 @@ import {
   DocumentIcon,
 } from "@heroicons/react/24/outline";
 
+type CardType = keyof typeof iconMap;
+
 const iconMap = {
   comments: ChatBubbleBottomCenterTextIcon,
   users: UserGroupIcon,
   posts: DocumentIcon,
 };
 
-export function Card({ title, value, type }) {
+interface CardProps {
+  title: string;
+  value: number;
+  type: CardType;
+}
+
+export function Card({ title, value, type }: CardProps) {
   const Icon = iconMap[type];
 
   return (

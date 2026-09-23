@@ -2,44 +2,36 @@ import setCookiesOnReq from "@/utils/setCookieOnReq";
 import { getAllUserApi } from "./authService";
 import { getAllCommentApi } from "./commentService";
 import { getPosts } from "./postServices";
-import toast from "react-hot-toast";
+import { getApiErrorMessage } from "@/utils/apiError";
 
-interface CardData {
+/** Aggregated counters shown on the dashboard cards. */
+export interface CardData {
   numberOfUsers: number;
   numberOfPosts: number;
   numberOfComments: number;
 }
 
+/**
+ * Fetches user/post/comment counters in parallel for the dashboard.
+ * Errors are rethrown (never toasted — this runs on the server, where
+ * react-hot-toast is a no-op) so the nearest error boundary can render them.
+ */
 export const fetchCardData = async (): Promise<CardData> => {
   const options = await setCookiesOnReq();
 
   try {
-    const data = await Promise.all([
+    const [users, comments, posts] = await Promise.all([
       getAllUserApi(options),
       getAllCommentApi(options),
       getPosts(),
     ]);
 
-    const numberOfUsers = Number(data[0].users.length ?? "0");
-    const numberOfComments = Number(data[1].data.commentsCount ?? "0");
-    const numberOfPosts = Number(data[2].posts.length ?? "0");
-
     return {
-      numberOfUsers,
-      numberOfPosts,
-      numberOfComments,
+      numberOfUsers: users.users?.length ?? 0,
+      numberOfComments: comments.commentsCount ?? 0,
+      numberOfPosts: posts.posts.length,
     };
-  } catch (error: any) {
-    toast.error(error.response.data.message);
-    throw error;
-  }
-};
-
-export const fetchLatestPosts = async () => {
-  try {
-    const { posts } = await getPosts("sort=latest&limit=5");
-    return posts;
-  } catch (error: any) {
-    return new Error(error?.response?.data?.message);
+  } catch (error) {
+    throw new Error(getApiErrorMessage(error));
   }
 };

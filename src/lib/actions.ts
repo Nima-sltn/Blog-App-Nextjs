@@ -2,29 +2,37 @@
 
 import { createCommentApi } from "@/services/commentService";
 import { StateType, CreateCommentProps } from "@/types/common";
+import { getApiErrorMessage } from "@/utils/apiError";
 import setCookiesOnReq from "@/utils/setCookieOnReq";
 import { revalidatePath } from "next/cache";
 
+/**
+ * Server action that creates a comment (or reply) on a post.
+ * Returns `{ message }` on success or `{ error }` on failure for use with
+ * `useActionState`.
+ */
 export const createComment = async (
   prevState: StateType,
-  { formData, postId, parentId }: CreateCommentProps,
+  { formData, postId, parentId, slug }: CreateCommentProps,
 ): Promise<StateType> => {
   const options = await setCookiesOnReq();
-  const rawFormData = {
-    postId,
-    parentId,
-    text: formData.get("text") as string,
-  };
+  const text = formData.get("text");
+
+  if (typeof text !== "string" || !text.trim()) {
+    return { error: "متن نظر الزامی است" };
+  }
 
   try {
-    const { data } = await createCommentApi(rawFormData, options);
+    const { data } = await createCommentApi(
+      { postId, parentId, text },
+      options,
+    );
     revalidatePath("/blogs");
-    const { message } = data;
-    return { message };
-  } catch (err: any) {
-    const error = err?.response?.data?.message;
-    console.log(error);
-
-    return { error };
+    // Invalidate the ISR cache of the post itself so the new comment shows
+    // up immediately instead of after the next revalidation window.
+    if (slug) revalidatePath(`/blogs/${slug}`);
+    return { message: data.message };
+  } catch (err: unknown) {
+    return { error: getApiErrorMessage(err) };
   }
 };

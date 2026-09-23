@@ -7,12 +7,12 @@ import Spinner from "@/ui/Spinner/Spinner";
 import Pagination from "@/components/Pagination/Pagination";
 import { getAllPostsApi } from "@/services/postServices";
 
-const PostPage = async ({
-  searchParams,
-}: {
-  searchParams: Record<string, string | string[] | undefined>;
-}) => {
-  const query = queryString.stringify(searchParams);
+interface PostPageProps {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
+
+const PostPage = async ({ searchParams }: PostPageProps) => {
+  const query = queryString.stringify(await searchParams);
 
   const { totalPages } = await getAllPostsApi(query);
 

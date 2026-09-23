@@ -7,7 +7,7 @@ interface ConfirmDeleteProps {
   resourceName: string;
   onClose: () => void;
   disabled?: boolean;
-  onConfirm: (formData?: any) => void | Promise<void>; // matches useFormState signature
+  onConfirm: () => void | Promise<void>;
 }
 
 const ConfirmDelete: FC<ConfirmDeleteProps> = ({
