@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
@@ -63,7 +69,9 @@ const DEBOUNCE_MS = 300;
  * Navigates between the main routes and searches posts live (debounced)
  * against `GET /post/list?search=`.
  * Keyboard driven: arrow keys move the selection, Enter navigates, Escape closes.
- * Built without extra dependencies, reusing the app's existing hooks and design tokens.
+ * Built as a native modal <dialog> so the browser provides the ::backdrop
+ * scrim, focus trap and focus restoration, reusing the app's existing hooks
+ * and design tokens.
  */
 export default function CommandPalette() {
   const router = useRouter();
@@ -76,8 +84,13 @@ export default function CommandPalette() {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   const close = useCallback(() => {
+    // Close the native dialog first so the browser restores focus to the
+    // element that was focused before the palette opened.
+    dialogRef.current?.close();
+
     setIsOpen(false);
     setQuery("");
     setResults([]);
@@ -89,7 +102,12 @@ export default function CommandPalette() {
     function onKeyDown(event: KeyboardEvent) {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
-        setIsOpen((open) => !open);
+
+        if (isOpen) {
+          close();
+        } else {
+          setIsOpen(true);
+        }
       }
     }
 
@@ -98,13 +116,36 @@ export default function CommandPalette() {
     return () => {
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, []);
+  }, [isOpen, close]);
 
-  useEffect(() => {
-    if (isOpen) {
-      inputRef.current?.focus();
+  // Promote the panel to a modal dialog (adds the ::backdrop scrim and a
+  // focus trap) and put the caret in the search field as soon as it opens.
+  useLayoutEffect(() => {
+    if (!isOpen) return;
+
+    const dialog = dialogRef.current;
+    if (dialog && !dialog.open) {
+      dialog.showModal();
     }
+
+    inputRef.current?.focus();
   }, [isOpen]);
+
+  // Clicks that land on the ::backdrop are dispatched on the <dialog>
+  // element itself, so listen on the document to close on outside clicks
+  // without attaching listeners to the (non-interactive) dialog element.
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function onDocumentClick(event: MouseEvent) {
+      if (event.target === dialogRef.current) {
+        close();
+      }
+    }
+
+    document.addEventListener("click", onDocumentClick);
+    return () => document.removeEventListener("click", onDocumentClick);
+  }, [isOpen, close]);
 
   useEscapeKey(close, isOpen);
   useLockBodyScroll(isOpen);
@@ -195,86 +236,75 @@ export default function CommandPalette() {
 
   return createPortal(
     isOpen ? (
-      <div
-        className="fixed inset-0 z-50 bg-secondary-800 bg-opacity-40 backdrop-blur-sm"
-        onClick={(event) => {
-          if (event.target === event.currentTarget) {
-            close();
-          }
-        }}
+      <dialog
+        ref={dialogRef}
+        aria-modal="true"
+        aria-label="جستجوی سریع"
+        className="fixed left-1/2 top-[15vh] z-50 m-0 w-[calc(100vw-2rem)] max-w-xl -translate-x-1/2 overflow-hidden rounded-xl border-none bg-secondary-0 p-0 shadow-2xl backdrop:bg-secondary-800 backdrop:bg-opacity-40 backdrop:backdrop-blur-sm"
       >
-        <div
-          className="fixed left-1/2 top-[15vh] w-[calc(100vw-2rem)] max-w-xl -translate-x-1/2 overflow-hidden rounded-xl bg-secondary-0 shadow-2xl"
-          role="dialog"
-          aria-modal="true"
-          aria-label="جستجوی سریع"
-        >
-          <div className="flex items-center gap-2 border-b border-secondary-200 px-4">
-            <MagnifyingGlassIcon className="h-5 w-5 shrink-0 text-secondary-400" />
+        <div className="flex items-center gap-2 border-b border-secondary-200 px-4">
+          <MagnifyingGlassIcon className="h-5 w-5 shrink-0 text-secondary-400" />
 
-            <input
-              ref={inputRef}
-              type="text"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              onKeyDown={onKeyDown}
-              placeholder="جستجوی پست یا رفتن به صفحه..."
-              className="w-full bg-transparent py-4 text-sm text-secondary-700 placeholder:text-secondary-400 focus:outline-none"
-              aria-label="جستجوی پست یا صفحه"
-              autoComplete="off"
-            />
+          <input
+            ref={inputRef}
+            type="text"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            onKeyDown={onKeyDown}
+            placeholder="جستجوی پست یا رفتن به صفحه..."
+            className="w-full bg-transparent py-4 text-sm text-secondary-700 placeholder:text-secondary-400 focus:outline-none"
+            aria-label="جستجوی پست یا صفحه"
+            autoComplete="off"
+          />
 
-            <kbd className="hidden shrink-0 rounded border border-secondary-200 px-1.5 py-0.5 text-[10px] text-secondary-400 sm:block">
-              Esc
-            </kbd>
-          </div>
-
-          <ul ref={listRef} className="max-h-80 overflow-y-auto py-2">
-            {items.map((item, index) => (
-              <li key={item.id}>
-                <button
-                  type="button"
-                  onClick={() => navigate(item.href)}
-                  onMouseEnter={() => setActiveIndex(index)}
-                  className={`flex w-full items-center gap-3 px-4 py-3 text-right text-sm ${
-                    index === activeIndex
-                      ? "bg-primary-100/40 text-primary-900"
-                      : "text-secondary-600"
-                  }`}
-                >
-                  <span className="shrink-0 text-secondary-400">
-                    {item.icon}
-                  </span>
-
-                  <span className="truncate">{item.label}</span>
-
-                  {item.hint ? (
-                    <span className="mr-auto shrink-0 text-xs text-secondary-400">
-                      {item.hint}
-                    </span>
-                  ) : null}
-                </button>
-              </li>
-            ))}
-
-            {items.length === 0 ? (
-              <li className="px-4 py-6 text-center text-sm text-secondary-400">
-                {isSearching ? "در حال جستجو..." : "نتیجه ای پیدا نشد"}
-              </li>
-            ) : null}
-          </ul>
-
-          <div className="flex items-center justify-between border-t border-secondary-200 px-4 py-2 text-[10px] text-secondary-400">
-            <span>برای حرکت از کلید های جهت دار استفاده کنید</span>
-
-            <span className="flex items-center gap-1">
-              Enter
-              <ArrowRightIcon className="h-3 w-3" />
-              رفتن
-            </span>
-          </div>
+          <kbd className="hidden shrink-0 rounded border border-secondary-200 px-1.5 py-0.5 text-[10px] text-secondary-400 sm:block">
+            Esc
+          </kbd>
         </div>
-      </div>
+
+        <ul ref={listRef} className="max-h-80 overflow-y-auto py-2">
+          {items.map((item, index) => (
+            <li key={item.id}>
+              <button
+                type="button"
+                onClick={() => navigate(item.href)}
+                onMouseEnter={() => setActiveIndex(index)}
+                className={`flex w-full items-center gap-3 px-4 py-3 text-right text-sm ${
+                  index === activeIndex
+                    ? "bg-primary-100/40 text-primary-900"
+                    : "text-secondary-600"
+                }`}
+              >
+                <span className="shrink-0 text-secondary-400">{item.icon}</span>
+
+                <span className="truncate">{item.label}</span>
+
+                {item.hint ? (
+                  <span className="mr-auto shrink-0 text-xs text-secondary-400">
+                    {item.hint}
+                  </span>
+                ) : null}
+              </button>
+            </li>
+          ))}
+
+          {items.length === 0 ? (
+            <li className="px-4 py-6 text-center text-sm text-secondary-400">
+              {isSearching ? "در حال جستجو..." : "نتیجه ای پیدا نشد"}
+            </li>
+          ) : null}
+        </ul>
+
+        <div className="flex items-center justify-between border-t border-secondary-200 px-4 py-2 text-[10px] text-secondary-400">
+          <span>برای حرکت از کلید های جهت دار استفاده کنید</span>
+
+          <span className="flex items-center gap-1">
+            Enter
+            <ArrowRightIcon className="h-3 w-3" />
+            رفتن
+          </span>
+        </div>
+      </dialog>
     ) : null,
     document.body,
   );

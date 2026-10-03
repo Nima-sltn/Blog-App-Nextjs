@@ -45,6 +45,22 @@ const Drawer = ({ open, onClose, children }: DrawerProps) => {
   // Lock body scroll while the drawer is open.
   useLockBodyScroll(open);
 
+  // Close when the user clicks the ::backdrop. Backdrop clicks are dispatched
+  // on the dialog element itself, so a document-level listener keeps the
+  // handler off the (non-interactive) <dialog> element.
+  useEffect(() => {
+    if (!open) return;
+
+    function onDocumentClick(event: MouseEvent) {
+      if (event.target === dialogRef.current) {
+        onClose();
+      }
+    }
+
+    document.addEventListener("click", onDocumentClick);
+    return () => document.removeEventListener("click", onDocumentClick);
+  }, [open, onClose]);
+
   // Manage dialog visibility and focus.
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -78,15 +94,6 @@ const Drawer = ({ open, onClose, children }: DrawerProps) => {
       className={`fixed right-0 top-0 z-50 m-0 h-full max-h-full w-[250px] max-w-full translate-x-0 border-none bg-transparent p-0 shadow-none transition-transform duration-300 ease-in-out motion-reduce:transition-none ${
         open ? "translate-x-0" : "translate-x-full"
       }`}
-      onCancel={(event) => {
-        event.preventDefault();
-        onClose();
-      }}
-      onClick={(event) => {
-        if (event.target === event.currentTarget) {
-          onClose();
-        }
-      }}
     >
       <div className="h-full max-h-full overflow-y-auto bg-secondary-0">
         {children}

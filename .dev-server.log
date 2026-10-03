@@ -1,0 +1,57 @@
+
+> my-app@0.1.0 dev
+> next dev --turbopack
+
+   ▲ Next.js 15.3.5 (Turbopack)
+   - Local:        http://localhost:2890
+   - Network:      http://172.18.0.1:2890
+   - Environments: .env.development.local
+
+ ✓ Starting...
+ ○ Compiling middleware ...
+ ✓ Compiled middleware in 629ms
+ ✓ Ready in 5.1s
+ ○ Compiling / ...
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ Compiled / in 5.8s
+ GET / 200 in 6411ms
+ GET / 200 in 115ms
+ GET / 200 in 119ms
+ GET / 200 in 241ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 637ms
+ GET /favicon.ico?favicon.e8f5562a.ico 200 in 970ms
+ ○ Compiling /blogs ...
+ ✓ Compiled /blogs in 1692ms
+ ⨯ TypeError: fetch failed
+    at async getPosts (src\services\postServices.ts:52:14)
+    at async BlogPage (src\app\(blog)\blogs\(PostList)\page.tsx:16:20)
+  50 |   options?: RequestInit,
+  51 | ): Promise<PostListPayload> => {
+> 52 |   const res = await fetch(
+     |              ^
+  53 |     `${process.env.NEXT_PUBLIC_BASE_URL}/post/list?${queries}`,
+  54 |     options,
+  55 |   ); {
+  digest: '4195646341',
+  [cause]: [AggregateError: ] { code: 'EACCES' }
+}
+ GET /blogs 200 in 1873ms
+ ○ Compiling /signin ...
+ ✓ Compiled /signin in 2.5s
+ GET /signin 200 in 3013ms
+ ✓ Compiled middleware in 5ms
+ GET /signin 200 in 569ms
+ GET /signin 200 in 230ms
+ ○ Compiling /drawer-probe ...
+ ✓ Compiled /drawer-probe in 2s
+ GET /drawer-probe 200 in 2512ms
+ ✓ Compiled middleware in 11ms
+ ○ Compiling /_not-found/page ...
+ ✓ Compiled /_not-found/page in 2.6s
+ GET /drawer-probe 404 in 3172ms
+ GET /drawer-probe 404 in 268ms
+ GET /drawer-probe 404 in 498ms
+[?25h
